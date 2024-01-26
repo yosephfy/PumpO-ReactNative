@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { TouchableOpacity, StyleSheet, View } from "react-native";
+import React, { useContext, useState } from "react";
+import { TouchableOpacity, StyleSheet, View, Alert } from "react-native";
 import { Text } from "react-native-paper";
 import Background from "../../src/components/Background";
 import Logo from "../../src/components/Logo";
@@ -11,11 +11,13 @@ import { theme } from "../../src/core/theme";
 import { emailValidator } from "../../src/helpers/emailValidator";
 import { passwordValidator } from "../../src/helpers/passwordValidator";
 import { useNavigation } from "expo-router";
+import { AuthContext } from "../../src/context/AuthContext";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState({ value: "", error: "" });
   const [password, setPassword] = useState({ value: "", error: "" });
   const { navigate } = useNavigation();
+  const { login } = useContext(AuthContext);
 
   const onLoginPressed = () => {
     const emailError = emailValidator(email.value);
@@ -24,6 +26,12 @@ export default function LoginScreen() {
       setEmail({ ...email, error: emailError });
       setPassword({ ...password, error: passwordError });
       return;
+    }
+
+    try {
+      login({ username: "hmeagh5", password: "123456" });
+    } catch (error) {
+      Alert.alert(JSON.stringify(error));
     }
     navigate("(HOME)", {});
   };

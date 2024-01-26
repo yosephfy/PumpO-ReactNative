@@ -1,16 +1,10 @@
-import React, { useState } from "react";
-import { TouchableOpacity, StyleSheet, View } from "react-native";
-import { Text } from "react-native";
-import Background from "../../src/components/Background";
-import Logo from "../../src/components/Logo";
-import Header from "../../src/components/Header";
-import Button from "../../src/components/Button";
-import Paragraph from "../../src/components/Paragraph";
-import BackButton from "../../src/components/BackButton";
-import { theme } from "../../src/core/theme";
-import { emailValidator } from "../../src/helpers/emailValidator";
-import { passwordValidator } from "../../src/helpers/passwordValidator";
 import { useNavigation } from "expo-router";
+import React from "react";
+import Background from "../../src/components/Background";
+import Button from "../../src/components/Button";
+import Header from "../../src/components/Header";
+import Logo from "../../src/components/Logo";
+import Paragraph from "../../src/components/Paragraph";
 
 export default function StartScreen({ navigation }) {
   const { navigate } = useNavigation();

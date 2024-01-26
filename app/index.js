@@ -2,10 +2,15 @@ import { NavigationContainer } from "@react-navigation/native";
 import { Button, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { Redirect, useRouter } from "expo-router";
 import Ionicons from "@expo/vector-icons/MaterialIcons";
+import { AuthContextProvider } from "../src/context/AuthContext";
 
 export default function Page() {
   const router = useRouter();
-  return <Redirect href="/(START)" />;
+  return (
+    <AuthContextProvider>
+      <Redirect href={"/(START)"} />
+    </AuthContextProvider>
+  );
   /* return (
     <SafeAreaView>
       <Text>INDEX</Text>
