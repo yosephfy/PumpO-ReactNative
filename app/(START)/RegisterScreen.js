@@ -11,13 +11,14 @@ import { theme } from "../../src/core/theme";
 import { emailValidator } from "../../src/helpers/emailValidator";
 import { nameValidator } from "../../src/helpers/nameValidator";
 import { passwordValidator } from "../../src/helpers/passwordValidator";
-import { useNavigation } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 
 export default function RegisterScreen() {
   const [name, setName] = useState({ value: "", error: "" });
   const [email, setEmail] = useState({ value: "", error: "" });
   const [password, setPassword] = useState({ value: "", error: "" });
   const { navigate } = useNavigation();
+  const router = useRouter();
 
   const onSignUpPressed = () => {
     const nameError = nameValidator(name.value);
@@ -29,12 +30,13 @@ export default function RegisterScreen() {
       setPassword({ ...password, error: passwordError });
       return;
     }
-    navigate("LoginScreen");
+    router.push("LoginScreen");
+    //navigate("LoginScreen");
   };
 
   return (
     <Background>
-      <BackButton goBack={() => navigate(-1)} />
+      <BackButton goBack={() => router.back()} />
       <Logo />
       <Header>Create Account</Header>
       <TextInput
@@ -75,7 +77,7 @@ export default function RegisterScreen() {
       </Button>
       <View style={styles.row}>
         <Text>Already have an account? </Text>
-        <TouchableOpacity onPress={() => navigate("LoginScreen")}>
+        <TouchableOpacity onPress={() => router.push("LoginScreen")}>
           <Text style={styles.link}>Login</Text>
         </TouchableOpacity>
       </View>

@@ -22,12 +22,12 @@ export const AuthContextProvider = ({ children }) => {
       });
   });
 
-  const login = async (inputs) =>
+  const login = (inputs) =>
     makeRequest.post(apiCalls().auth.add.login, inputs).then((res) => {
       setCurrentUser(res.data);
       AsyncStorage.setItem("user", JSON.stringify(res.data))
-        .then((res) => Alert.alert(JSON.stringify(res.data)))
-        .catch((err) => Alert.alert(JSON.stringify(err)));
+        .then((res) => console.log("User Logged IN"))
+        .catch((err) => console.error("Error Logging User", err));
     });
 
   return (

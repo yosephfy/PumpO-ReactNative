@@ -10,48 +10,53 @@ import BackButton from "../../src/components/BackButton";
 import { theme } from "../../src/core/theme";
 import { emailValidator } from "../../src/helpers/emailValidator";
 import { passwordValidator } from "../../src/helpers/passwordValidator";
-import { useNavigation } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import { AuthContext } from "../../src/context/AuthContext";
+import { nameValidator } from "../../src/helpers/nameValidator";
+import { asyncCallWithTimeout } from "../../src/utility/utility";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState({ value: "", error: "" });
+  const [err, setErr] = useState(null);
+  const [username, setUsername] = useState({ value: "", error: "" });
   const [password, setPassword] = useState({ value: "", error: "" });
-  const { navigate } = useNavigation();
   const { login } = useContext(AuthContext);
+  const router = useRouter();
 
-  const onLoginPressed = () => {
-    const emailError = emailValidator(email.value);
+  const onLoginPressed = async () => {
+    //const emailError = emailValidator(email.value);
+    const usernameError = nameValidator(username.value);
     const passwordError = passwordValidator(password.value);
-    if (emailError || passwordError) {
-      setEmail({ ...email, error: emailError });
+    if (usernameError || passwordError) {
+      setUsername({ ...username, error: usernameError });
       setPassword({ ...password, error: passwordError });
       return;
     }
 
-    try {
-      login({ username: "hmeagh5", password: "123456" });
-    } catch (error) {
-      Alert.alert(JSON.stringify(error));
-    }
-    navigate("(HOME)", {});
+    const loginObj = { username: username.value, password: password.value };
+
+    asyncCallWithTimeout(login(loginObj), 3000)
+      .then((res) => router.replace("(HOME)"))
+      .catch((error) => setErr(error.response.data));
+
+    //navigate("(HOME)", {});
   };
 
   return (
     <Background>
-      <BackButton goBack={() => navigate(-1, {})} />
+      <BackButton goBack={() => router.back()} />
       <Logo />
       <Header>Welcome back.</Header>
       <TextInput
-        label="Email"
+        label="Username"
         returnKeyType="next"
-        value={email.value}
-        onChangeText={(text) => setEmail({ value: text, error: "" })}
-        error={!!email.error}
-        errorText={email.error}
+        value={username.value}
+        onChangeText={(text) => setUsername({ value: text, error: "" })}
+        error={!!username.error}
+        errorText={username.error}
         autoCapitalize="none"
-        autoCompleteType="email"
-        textContentType="emailAddress"
-        keyboardType="email-address"
+        autoCompleteType="text"
+        textContentType="username"
       />
       <TextInput
         label="Password"
@@ -63,16 +68,19 @@ export default function LoginScreen() {
         secureTextEntry
       />
       <View style={styles.forgotPassword}>
-        <TouchableOpacity onPress={() => navigate("ResetPasswordScreen", {})}>
+        <TouchableOpacity
+          onPress={() => router.push("ResetPasswordScreen", {})}
+        >
           <Text style={styles.forgot}>Forgot your password?</Text>
         </TouchableOpacity>
       </View>
+      <Text style={styles.errorMessage}>{err && err}</Text>
       <Button mode="contained" onPress={onLoginPressed}>
         Login
       </Button>
       <View style={styles.row}>
         <Text>Don’t have an account? </Text>
-        <TouchableOpacity onPress={() => navigate("RegisterScreen", {})}>
+        <TouchableOpacity onPress={() => router.push("RegisterScreen", {})}>
           <Text style={styles.link}>Sign up</Text>
         </TouchableOpacity>
       </View>
@@ -97,5 +105,9 @@ const styles = StyleSheet.create({
   link: {
     fontWeight: "bold",
     color: theme.colors.primary,
+  },
+  errorMessage: {
+    color: theme.colors.error,
+    marginBottom: 5,
   },
 });
