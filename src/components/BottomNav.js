@@ -1,43 +1,37 @@
+import { Ionicons, MaterialCommunityIcons, Octicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import React, { useContext } from "react";
 import {
-  TouchableOpacity,
   Image,
-  StyleSheet,
-  StatusBar,
   SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
 } from "react-native";
-import {
-  Entypo,
-  Ionicons,
-  MaterialCommunityIcons,
-  Octicons,
-} from "@expo/vector-icons";
-import { theme } from "../core/theme";
 import { AuthContext } from "../context/AuthContext";
-import { useRouter } from "expo-router";
+import { theme } from "../core/theme";
 
-export default function BottomNav({ goBack }) {
+export default function BottomNav() {
   const { currentUser } = useContext(AuthContext);
   const router = useRouter();
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity onPress={() => router.replace("(HOME)")}>
+      <TouchableOpacity onPress={() => router.navigate("(HOME)")}>
         <Octicons name="home" size={26} style={styles.image} />
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => router.push("(HOME)")}>
+      <TouchableOpacity onPress={() => router.navigate("(HOME)")}>
         <Ionicons name="search" size={26} style={styles.image} />
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => router.push("(HOME)")}>
+      <TouchableOpacity onPress={() => router.navigate("(HOME)")}>
         <Ionicons name="add-circle-outline" size={26} style={styles.image} />
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => router.push("(HOME)")}>
+      <TouchableOpacity onPress={() => router.navigate("(HOME)")}>
         <MaterialCommunityIcons
           name="play-box-multiple-outline"
           size={26}
           style={styles.image}
         />
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => router.push("(HOME)/profile")}>
+      <TouchableOpacity onPress={() => router.navigate("(HOME)/profile")}>
         <Image
           style={[
             styles.image,

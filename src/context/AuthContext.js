@@ -20,7 +20,7 @@ export const AuthContextProvider = ({ children }) => {
       .catch((err) => {
         Alert.alert(JSON.stringify(err));
       });
-  });
+  }, []);
 
   const login = (inputs) =>
     makeRequest.post(apiCalls().auth.add.login, inputs).then((res) => {
