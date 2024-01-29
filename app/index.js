@@ -9,10 +9,20 @@ import { useEffect, useState } from "react";
 export default function Page() {
   const router = useRouter();
   const [loggedIn, setLoggedIn] = useState(false);
+  const [temp, setTemp] = useState(false);
+  useEffect(() => {
+    AsyncStorage.getItem("user").then((res) => {
+      if (res) setLoggedIn(true);
+    });
+  }, [temp]);
 
   return (
     <AuthContextProvider>
-      <Redirect href={"/(START)"} />
+      {loggedIn ? (
+        <Redirect href={"/(HOME)"} />
+      ) : (
+        <Redirect href={"/(START)"} />
+      )}
     </AuthContextProvider>
   );
   /* return (

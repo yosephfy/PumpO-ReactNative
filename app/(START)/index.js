@@ -1,14 +1,17 @@
 import { Redirect } from "expo-router";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AuthContext } from "../../src/context/AuthContext";
 
 export default function index() {
+  const [loggedIn, setLoggedIn] = useState(false);
+
   return (
     <>
-      {AsyncStorage.getItem("user") ? (
+      {loggedIn ? (
         <Redirect href={"/(HOME)"} />
       ) : (
-        <Redirect href={"/(START)"} />
+        <Redirect href={"/(START)/StartScreen"} />
       )}
     </>
   );

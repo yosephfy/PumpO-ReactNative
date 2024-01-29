@@ -35,7 +35,10 @@ export default function FeedContainer({ domain }) {
             const res = await makeRequest.get(apiFeedCalls[element]);
             list = list.concat(res.data);
           } catch (error) {
-            console.error(`Error fetching data for ${element}:`, error);
+            console.error(
+              `Error fetching data for ${element}:`,
+              JSON.stringify(error.message)
+            );
           }
         })
       );

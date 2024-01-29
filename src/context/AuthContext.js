@@ -30,6 +30,33 @@ export const AuthContextProvider = ({ children }) => {
         .catch((err) => console.error("Error Logging User", err));
     });
 
+  const loginn = (inputs) => {
+    let timeoutHandle;
+
+    const timeoutPromise = new Promise((_resolve, reject) => {
+      timeoutHandle = setTimeout(
+        () => reject(new Error("Async call timeout limit reached")),
+        3000
+      );
+    });
+    return new Promise(async () => {
+      const result = await Promise.race([
+        makeRequest.post(apiCalls().auth.add.login, inputs).then((res) => {
+          setCurrentUser(res.data);
+          AsyncStorage.setItem("user", JSON.stringify(res.data))
+            .then((res_1) => {
+              console.log("User Logged IN");
+            })
+            .catch((err) => console.error("Error Logging User", err));
+        }),
+        ,
+        timeoutPromise,
+      ]);
+      clearTimeout(timeoutPromise);
+      return result;
+    });
+  };
+
   return (
     <AuthContext.Provider value={{ currentUser, login }}>
       {children}

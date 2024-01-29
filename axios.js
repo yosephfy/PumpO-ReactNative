@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const makeRequest = axios.create({
-  baseURL: "http://10.104.132.91:8080/api/",
+  baseURL: "http://10.104.132.10:8080/api/",
   origins: true,
   withCredentials: true,
   headers: {

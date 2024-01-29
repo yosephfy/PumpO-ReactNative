@@ -35,9 +35,12 @@ export default function LoginScreen() {
 
     const loginObj = { username: username.value, password: password.value };
 
-    asyncCallWithTimeout(login(loginObj), 3000)
-      .then((res) => router.replace("(HOME)"))
-      .catch((error) => setErr(error.response.data));
+    asyncCallWithTimeout(login(loginObj), 2000)
+      .then((res) => {
+        router.replace("(HOME)");
+        console.log(res.data, "YO");
+      })
+      .catch((error) => setErr(JSON.stringify(error)));
 
     //navigate("(HOME)", {});
   };
