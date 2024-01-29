@@ -1,6 +1,5 @@
-import { View, Text, SafeAreaView } from "react-native";
-import React from "react";
 import { Stack } from "expo-router";
+import React from "react";
 import BottomNav from "../../src/components/BottomNav";
 
 export default function Layout() {

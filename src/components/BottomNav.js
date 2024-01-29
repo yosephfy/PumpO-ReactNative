@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
-import { theme } from "../core/theme";
+import { dimensions, theme } from "../core/theme";
 
 export default function BottomNav() {
   const { currentUser } = useContext(AuthContext);
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: theme.colors.background,
     bottom: 0,
-    height: 80,
+    height: dimensions.bottomNavHeight,
     justifyContent: "space-around",
   },
   image: {

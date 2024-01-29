@@ -3,9 +3,13 @@ import { Button, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { Redirect, useRouter } from "expo-router";
 import Ionicons from "@expo/vector-icons/MaterialIcons";
 import { AuthContextProvider } from "../src/context/AuthContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect, useState } from "react";
 
 export default function Page() {
   const router = useRouter();
+  const [loggedIn, setLoggedIn] = useState(false);
+
   return (
     <AuthContextProvider>
       <Redirect href={"/(START)"} />
