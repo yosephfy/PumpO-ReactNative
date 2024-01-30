@@ -15,18 +15,6 @@ export default function Interactions({ actions, interactions }) {
         <Ionicons name="chatbubble-outline" size={24} color="black" />
         <Text style={styles.interactionNumbers}>{interactions.comments}</Text>
       </View>
-      <View name="share" style={styles.interactions}>
-        <Ionicons name="arrow-redo-outline" size={24} color="black" />
-        <Text style={styles.interactionNumbers}>14</Text>
-      </View>
-      <View name="share" style={styles.interactions}>
-        {interactions.saved ? (
-          <Ionicons name="bookmark" size={24} color="black" />
-        ) : (
-          <Ionicons name="bookmark-outline" size={24} color="black" />
-        )}
-        <Text style={styles.interactionNumbers}>2</Text>
-      </View>
     </View>
   );
 }
@@ -35,7 +23,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     paddingVertical: 10,
-    marginLeft: 5,
+    marginLeft: 10,
   },
   interactions: {
     width: 45,

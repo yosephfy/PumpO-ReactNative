@@ -45,6 +45,21 @@ export default function LoginScreen() {
     //navigate("(HOME)", {});
   };
 
+  const onLoginPressedADMIN = async () => {
+    //const emailError = emailValidator(email.value);
+
+    const loginObj = { username: "awrate3", password: "123456" };
+
+    asyncCallWithTimeout(login(loginObj), 2000)
+      .then((res) => {
+        router.replace("(HOME)");
+        console.log(res.data, "YO");
+      })
+      .catch((error) => setErr(JSON.stringify(error)));
+
+    //navigate("(HOME)", {});
+  };
+
   return (
     <Background>
       <BackButton goBack={() => router.back()} />
@@ -80,6 +95,9 @@ export default function LoginScreen() {
       <Text style={styles.errorMessage}>{err && err}</Text>
       <Button mode="contained" onPress={onLoginPressed}>
         Login
+      </Button>
+      <Button mode="contained" onPress={onLoginPressedADMIN}>
+        Login ADMIN
       </Button>
       <View style={styles.row}>
         <Text>Don’t have an account? </Text>

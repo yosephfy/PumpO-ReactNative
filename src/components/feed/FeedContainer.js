@@ -5,7 +5,7 @@ import { makeRequest } from "../../../axios";
 import { AuthContext } from "../../context/AuthContext";
 import { apiCalls } from "../../utility/Enums";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import SingleFeed from "./SingleFeed";
+import PostImage from "./PostImage";
 import { dimensions } from "../../core/theme";
 //import Feed from "./Feed";
 //import "./feed.css";
@@ -62,7 +62,7 @@ export default function FeedContainer({ domain }) {
         <Text>"Loading..."</Text>
       ) : (
         data.map((fee) => {
-          return <SingleFeed feed={fee} key={fee.id} />;
+          return <PostImage feed={fee} key={fee.id} />;
         })
       )}
     </ScrollView>
