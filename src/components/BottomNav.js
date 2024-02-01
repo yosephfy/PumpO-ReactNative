@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 import { dimensions, theme } from "../core/theme";
+import ProfilePicture from "./ProfilePicture";
 
 export default function BottomNav() {
   const { currentUser } = useContext(AuthContext);
@@ -31,18 +32,11 @@ export default function BottomNav() {
           style={styles.image}
         />
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => router.navigate("(HOME)/profile")}>
-        <Image
-          style={[
-            styles.image,
-            {
-              borderRadius: 1000,
-              borderColor: theme.colors.primary,
-              borderWidth: 2,
-            },
-          ]}
-          src={currentUser.profilePic}
-        />
+      <TouchableOpacity
+        style={styles.image}
+        onPress={() => router.navigate("(HOME)/profile")}
+      >
+        <ProfilePicture picture={currentUser.profilePic} size={30} />
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -59,7 +53,5 @@ const styles = StyleSheet.create({
   },
   image: {
     top: 10,
-    width: 30,
-    height: 30,
   },
 });

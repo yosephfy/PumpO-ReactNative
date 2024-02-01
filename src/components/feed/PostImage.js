@@ -4,6 +4,7 @@ import { Ionicons, Entypo } from "@expo/vector-icons";
 import { theme } from "../../core/theme";
 import Interactions from "./Interactions";
 import CommentContainer from "./CommentContainer";
+import ProfilePicture from "../ProfilePicture";
 
 export default function PostImage({ feed }) {
   const [viewCaption, setViewCaption] = useState(false);
@@ -12,7 +13,7 @@ export default function PostImage({ feed }) {
     <View style={styles.container}>
       <View style={styles.top}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Image style={[styles.image]} src={feed.profilePic} />
+          <ProfilePicture picture={feed.profilePic} size={32} />
           <Text style={styles.title}>
             @{feed.username}
             {" • "}

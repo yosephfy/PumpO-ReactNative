@@ -10,11 +10,11 @@ import BackButton from "../../src/components/BackButton";
 import { theme } from "../../src/core/theme";
 import { emailValidator } from "../../src/helpers/emailValidator";
 import { passwordValidator } from "../../src/helpers/passwordValidator";
-import { useNavigation } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 
 export default function ResetPasswordScreen() {
   const [email, setEmail] = useState({ value: "", error: "" });
-  const { navigate } = useNavigation();
+  const router = useRouter();
 
   const sendResetPasswordEmail = () => {
     const emailError = emailValidator(email.value);
@@ -27,7 +27,7 @@ export default function ResetPasswordScreen() {
 
   return (
     <Background>
-      <BackButton goBack={() => navigate(-1)} />
+      <BackButton goBack={() => router.back()} />
       <Logo />
       <Header>Restore Password</Header>
       <TextInput

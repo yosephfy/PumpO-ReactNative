@@ -13,6 +13,8 @@ import { apiCalls } from "../../utility/Enums";
 import { AuthContext } from "../../context/AuthContext";
 import { theme } from "../../core/theme";
 import { Ionicons } from "@expo/vector-icons";
+import ProfilePicture from "../ProfilePicture";
+import SingleComment from "./SingleComment";
 
 export default function CommentContainer({ post }) {
   const { currentUser } = useContext(AuthContext);
@@ -26,7 +28,7 @@ export default function CommentContainer({ post }) {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.writeCommentContainer}>
-        <Image src={currentUser.profilePic} style={styles.userProfilePic} />
+        <ProfilePicture picture={currentUser.profilePic} size={28} />
         <TextInput
           style={styles.input}
           numberOfLines={3}
@@ -40,7 +42,6 @@ export default function CommentContainer({ post }) {
           style={styles.sendBtn}
         />
       </View>
-      <Text>CommentContainer</Text>
       {error ? (
         <Text>Something went wrong..</Text>
       ) : isLoading ? (
@@ -54,16 +55,12 @@ export default function CommentContainer({ post }) {
   );
 }
 
-const SingleComment = ({ comment }) => {
-  return (
-    <View>
-      <Text>{comment.desc}</Text>
-    </View>
-  );
-};
-
 const styles = StyleSheet.create({
-  container: { backgroundColor: "wheat", maxHeight: 400 },
+  container: {
+    backgroundColor: theme.colors.background,
+    maxHeight: 400,
+    marginBottom: 20,
+  },
   writeCommentContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -71,6 +68,9 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     gap: 10,
     alignItems: "center",
+    paddingVertical: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.surfaceDisabled,
   },
   input: {
     backgroundColor: theme.colors.surface,
