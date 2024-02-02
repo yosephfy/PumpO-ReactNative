@@ -1,17 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { useContext } from "react";
-//import { useParams } from "react-router";
+import { ScrollView, StyleSheet, Text } from "react-native";
 import { makeRequest } from "../../../axios";
 import { AuthContext } from "../../context/AuthContext";
-import { apiCalls } from "../../utility/Enums";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import PostImage from "./PostImage";
 import { dimensions } from "../../core/theme";
-//import Feed from "./Feed";
-//import "./feed.css";
+import { apiCalls } from "../../utility/Enums";
+import PostImage from "./PostImage";
 
 export default function FeedContainer({ domain }) {
-  //const params = useParams();
   const { currentUser } = useContext(AuthContext);
 
   /* const apiFeedCalls = {
@@ -19,7 +15,8 @@ export default function FeedContainer({ domain }) {
     followed: apiCalls(params.id).feed.get.followed,
     user: apiCalls(currentUser.id).feed.get.profile,
     liked: apiCalls(params.id).feed.get.liked,
-  }; */ const apiFeedCalls = {
+  }; */
+  const apiFeedCalls = {
     profile: apiCalls(currentUser.id).feed.get.profile,
     followed: apiCalls(currentUser.id).feed.get.followed,
     user: apiCalls(currentUser.id).feed.get.profile,

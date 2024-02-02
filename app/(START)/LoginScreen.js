@@ -55,7 +55,7 @@ export default function LoginScreen() {
         router.replace("(HOME)");
         console.log(res.data, "YO");
       })
-      .catch((error) => setErr(JSON.stringify(error)));
+      .catch((error) => setErr(JSON.stringify(error.message)));
 
     //navigate("(HOME)", {});
   };

@@ -1,14 +1,8 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableHighlight,
-  TouchableOpacity,
-} from "react-native";
-import React from "react";
-import ProfilePicture from "../ProfilePicture";
 import { Entypo } from "@expo/vector-icons";
+import React from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { theme } from "../../core/theme";
+import ProfilePicture from "../ProfilePicture";
 
 export default function SingleComment({ comment }) {
   return (

@@ -1,14 +1,126 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
-import { Ionicons, Entypo } from "@expo/vector-icons";
+import { Entypo, Ionicons } from "@expo/vector-icons";
+import { useQueryClient } from "@tanstack/react-query";
+import React, { useContext, useEffect, useState } from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { makeRequest } from "../../../axios";
+import { AuthContext } from "../../context/AuthContext";
 import { theme } from "../../core/theme";
-import Interactions from "./Interactions";
-import CommentContainer from "./CommentContainer";
+import { apiCalls } from "../../utility/Enums";
+import { WhatTimeAgo } from "../../utility/utility";
 import ProfilePicture from "../ProfilePicture";
+import CommentContainer from "./CommentContainer";
 
 export default function PostImage({ feed }) {
+  const { currentUser } = useContext(AuthContext);
+  const queryClient = useQueryClient();
+
+  const [change, setChange] = useState();
   const [viewCaption, setViewCaption] = useState(false);
-  const [openComment, setOpenComment] = useState(true);
+  const [openComment, setOpenComment] = useState(false);
+
+  const [liked, setLiked] = useState(false);
+  const [favorited, setFavorited] = useState(false);
+
+  const [numOfComments, setNumOfComments] = useState(0);
+  const [numOfLikes, setNumOfLikes] = useState(0);
+
+  // Likes
+  useEffect(() => {
+    makeRequest
+      .get(apiCalls(feed.id).like.get.fromPost)
+      .then((res) => {
+        setLiked(res.data.some((d) => d["userId"] === currentUser.id));
+        setNumOfLikes(res.data.length || 0);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [change]);
+
+  // Comments
+  useEffect(() => {
+    makeRequest
+      .get(apiCalls(feed.id).comment.get.fromPost)
+      .then((res) => {
+        setNumOfComments(res.data.length || 0);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [change]);
+
+  const onToggleLike = (action) => {
+    setLiked(action);
+    if (action) {
+      makeRequest
+        .post(apiCalls().like.add.post, {
+          userId: currentUser.id,
+          postId: feed.id,
+        })
+        .then((res) => {
+          console.log(`liked post ${feed.id}`);
+          setChange((prev) => !prev);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      makeRequest
+        .delete(apiCalls(feed.id).like.delete.post, {
+          userId: currentUser.id,
+          postId: feed.id,
+        })
+        .then((res) => {
+          console.log(`unliked post ${feed.id}`);
+          setChange((prev) => !prev);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  };
+
+  const onPostComment = (
+    comment = "",
+    isReply = false,
+    replyUserId = -1,
+    refetchFunction = () => {}
+  ) => {
+    if (!comment.trim()) return;
+
+    if (!isReply) {
+      makeRequest
+        .post(apiCalls().comment.add.post, {
+          elementType: "POST",
+          postId: feed.id,
+          desc: comment,
+        })
+        .then(() => {
+          refetchFunction();
+          queryClient.refetchQueries({ queryKey: ["subComment"] });
+        })
+        .catch((err) => {
+          console.error("Error sending message:", err);
+        });
+    } else {
+      makeRequest
+        .post(apiCalls().comment.add.comment, {
+          elementType: "COMMENT",
+          commentId: replyUserId.id,
+          desc: comment,
+        })
+        .then(() => {
+          refetchFunction();
+          queryClient.refetchQueries({
+            queryKey: ["subComment"],
+          });
+        })
+        .catch((err) => {
+          console.error("Error sending message:", err);
+        });
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.top}>
@@ -24,13 +136,13 @@ export default function PostImage({ feed }) {
                 color: theme.colors.backdrop,
               }}
             >
-              {"1 min"}
+              {WhatTimeAgo(feed.createdAt).short}
             </Text>
           </Text>
         </View>
 
         <View name="share" style={styles.topBtns}>
-          {false ? (
+          {favorited ? (
             <Ionicons name="star" size={20} color="black" />
           ) : (
             <Ionicons name="star-outline" size={20} color="black" />
@@ -42,18 +154,21 @@ export default function PostImage({ feed }) {
         <Image src={feed.img} style={styles.media} />
       </View>
       <View style={styles.bottomBtns}>
-        <View style={styles.interactions}>
-          {false ? (
-            <Entypo name="heart" size={24} color="black" />
-          ) : (
-            <Entypo name="heart-outlined" size={24} color="black" />
-          )}
-          <Text style={styles.interactionNumbers}>{15}</Text>
-        </View>
+        <TouchableOpacity onPress={() => onToggleLike(!liked)}>
+          <View style={styles.interactions}>
+            {liked ? (
+              <Entypo name="heart" size={24} color="black" />
+            ) : (
+              <Entypo name="heart-outlined" size={24} color="black" />
+            )}
+            <Text style={styles.interactionNumbers}>{numOfLikes}</Text>
+          </View>
+        </TouchableOpacity>
+
         <TouchableOpacity onPress={() => setOpenComment((prev) => !prev)}>
           <View name="comment" style={styles.interactions}>
             <Ionicons name="chatbubble-outline" size={24} color="black" />
-            <Text style={styles.interactionNumbers}>{23}</Text>
+            <Text style={styles.interactionNumbers}>{numOfComments}</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -67,7 +182,11 @@ export default function PostImage({ feed }) {
           {feed.desc}
         </Text>
       </View>
-      <View>{openComment && <CommentContainer post={feed} />}</View>
+      <View>
+        {openComment && (
+          <CommentContainer post={feed} onPostComment={onPostComment} />
+        )}
+      </View>
     </View>
   );
 }

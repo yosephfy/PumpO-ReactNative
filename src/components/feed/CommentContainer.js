@@ -1,24 +1,27 @@
+import { Ionicons } from "@expo/vector-icons";
+import { useQuery } from "@tanstack/react-query";
+import React, { useContext, useRef, useState } from "react";
 import {
-  View,
-  Text,
   ScrollView,
   StyleSheet,
-  Image,
+  Text,
   TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import React, { useContext } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { makeRequest } from "../../../axios";
-import { apiCalls } from "../../utility/Enums";
 import { AuthContext } from "../../context/AuthContext";
 import { theme } from "../../core/theme";
-import { Ionicons } from "@expo/vector-icons";
+import { apiCalls } from "../../utility/Enums";
 import ProfilePicture from "../ProfilePicture";
 import SingleComment from "./SingleComment";
 
-export default function CommentContainer({ post }) {
+export default function CommentContainer({ post, onPostComment }) {
   const { currentUser } = useContext(AuthContext);
-  const { error, isLoading, data } = useQuery({
+  const [commentInput, setCommentInput] = useState();
+  const writeBoxRef = useRef();
+
+  const { error, isLoading, data, refetch } = useQuery({
     queryKey: ["comments", post.id],
     queryFn: () =>
       makeRequest.get(apiCalls(post.id).comment.get.fromPost).then((res) => {
@@ -26,32 +29,40 @@ export default function CommentContainer({ post }) {
       }),
   });
   return (
-    <ScrollView style={styles.container}>
+    <>
       <View style={styles.writeCommentContainer}>
         <ProfilePicture picture={currentUser.profilePic} size={28} />
         <TextInput
+          ref={writeBoxRef}
+          id="commentInput"
           style={styles.input}
           numberOfLines={3}
           multiline
           textBreakStrategy="balanced"
+          onChangeText={(newText) => setCommentInput(newText)}
         />
-        <Ionicons
-          name="paper-plane-outline"
-          size={24}
-          color="black"
+        <TouchableOpacity
           style={styles.sendBtn}
-        />
+          onPress={() => {
+            onPostComment(commentInput, false, -1, refetch);
+            writeBoxRef.current.clear();
+          }}
+        >
+          <Ionicons name="paper-plane-outline" size={24} color="black" />
+        </TouchableOpacity>
       </View>
-      {error ? (
-        <Text>Something went wrong..</Text>
-      ) : isLoading ? (
-        <Text>Loading...</Text>
-      ) : (
-        data.map((comment) => (
-          <SingleComment key={comment.id} comment={comment} />
-        ))
-      )}
-    </ScrollView>
+      <ScrollView style={styles.container}>
+        {error ? (
+          <Text>Something went wrong..</Text>
+        ) : isLoading ? (
+          <Text>Loading...</Text>
+        ) : (
+          data.map((comment) => (
+            <SingleComment key={comment.id} comment={comment} />
+          ))
+        )}
+      </ScrollView>
+    </>
   );
 }
 
