@@ -1,7 +1,8 @@
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, Entypo } from "@expo/vector-icons";
 import { useQuery } from "@tanstack/react-query";
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
+  Alert,
   ScrollView,
   StyleSheet,
   Text,
@@ -19,6 +20,8 @@ import SingleComment from "./SingleComment";
 export default function CommentContainer({ post, onPostComment }) {
   const { currentUser } = useContext(AuthContext);
   const [commentInput, setCommentInput] = useState();
+  const [commentPlaceholder, setCommentPlaceholder] = useState(`Add a comment`);
+  const [isReplying, setIsReplying] = useState(0);
   const writeBoxRef = useRef();
 
   const { error, isLoading, data, refetch } = useQuery({
@@ -28,6 +31,12 @@ export default function CommentContainer({ post, onPostComment }) {
         return res.data;
       }),
   });
+
+  const AddReply = (replyUsername = null, replyCommentId = 0) => {
+    setCommentPlaceholder(`You are replying to ${replyUsername}`);
+    setIsReplying(replyCommentId);
+  };
+
   return (
     <>
       <View style={styles.writeCommentContainer}>
@@ -39,12 +48,24 @@ export default function CommentContainer({ post, onPostComment }) {
           numberOfLines={3}
           multiline
           textBreakStrategy="balanced"
+          placeholder={commentPlaceholder}
           onChangeText={(newText) => setCommentInput(newText)}
         />
+        {isReplying != 0 && (
+          <TouchableOpacity
+            style={styles.clearBtn}
+            onPress={() => {
+              setIsReplying(false);
+              setCommentPlaceholder(`Add a comment`);
+            }}
+          >
+            <Entypo name="cross" size={24} color={theme.colors.error} />
+          </TouchableOpacity>
+        )}
         <TouchableOpacity
           style={styles.sendBtn}
           onPress={() => {
-            onPostComment(commentInput, false, -1, refetch);
+            onPostComment(commentInput, isReplying, refetch);
             writeBoxRef.current.clear();
           }}
         >
@@ -58,7 +79,11 @@ export default function CommentContainer({ post, onPostComment }) {
           <Text>Loading...</Text>
         ) : (
           data.map((comment) => (
-            <SingleComment key={comment.id} comment={comment} />
+            <SingleComment
+              key={comment.id}
+              comment={comment}
+              onReplyFunc={AddReply}
+            />
           ))
         )}
       </ScrollView>
@@ -108,5 +133,9 @@ const styles = StyleSheet.create({
   sendBtn: {
     position: "absolute",
     right: 17,
+  },
+  clearBtn: {
+    position: "absolute",
+    right: 50,
   },
 });

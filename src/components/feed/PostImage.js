@@ -82,13 +82,12 @@ export default function PostImage({ feed }) {
 
   const onPostComment = (
     comment = "",
-    isReply = false,
-    replyUserId = -1,
+    isReply = 0,
     refetchFunction = () => {}
   ) => {
     if (!comment.trim()) return;
 
-    if (!isReply) {
+    if (isReply == 0) {
       makeRequest
         .post(apiCalls().comment.add.post, {
           elementType: "POST",
@@ -97,7 +96,7 @@ export default function PostImage({ feed }) {
         })
         .then(() => {
           refetchFunction();
-          queryClient.refetchQueries({ queryKey: ["subComment"] });
+          queryClient.refetchQueries({ queryKey: ["subcomments"] });
         })
         .catch((err) => {
           console.error("Error sending message:", err);
@@ -106,13 +105,13 @@ export default function PostImage({ feed }) {
       makeRequest
         .post(apiCalls().comment.add.comment, {
           elementType: "COMMENT",
-          commentId: replyUserId.id,
+          commentId: isReply,
           desc: comment,
         })
         .then(() => {
           refetchFunction();
           queryClient.refetchQueries({
-            queryKey: ["subComment"],
+            queryKey: ["subcomments"],
           });
         })
         .catch((err) => {
