@@ -1,12 +1,13 @@
-import { View, SafeAreaView, Text } from "react-native";
+import { useGlobalSearchParams } from "expo-router";
 import React from "react";
-import Ionicons from "@expo/vector-icons/FontAwesome6";
-import {} from "@fortawesome/free-solid-svg-icons";
+import { SafeAreaView, Text } from "react-native";
+import ProfilePage from "../../src/components/profile/ProfilePage";
 
 export default function profile() {
+  const { userId } = useGlobalSearchParams();
   return (
     <SafeAreaView>
-      <Text>profile</Text>
+      <ProfilePage id={userId} />
     </SafeAreaView>
   );
 }

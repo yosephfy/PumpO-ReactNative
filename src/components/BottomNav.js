@@ -36,7 +36,7 @@ export default function BottomNav() {
         style={styles.image}
         onPress={() => router.navigate("(HOME)/profile")}
       >
-        <ProfilePicture picture={currentUser.profilePic} size={30} />
+        <ProfilePicture user={currentUser} size={30} />
       </TouchableOpacity>
     </SafeAreaView>
   );

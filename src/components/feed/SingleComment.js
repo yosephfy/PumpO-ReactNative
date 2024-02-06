@@ -1,16 +1,21 @@
 import { Entypo } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { theme } from "../../core/theme";
 import ProfilePicture from "../ProfilePicture";
 import { useQuery } from "@tanstack/react-query";
 import { makeRequest } from "../../../axios";
 import { apiCalls } from "../../utility/Enums";
+import { router } from "expo-router";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function SingleComment({ comment, reply, onReplyFunc }) {
+  const { currentUser } = useContext(AuthContext);
   const [expandComment, setExpandSubcomment] = useState(false);
   const [subcommentCurrViewSize, setSubcommentCurrViewSize] = useState(3);
-
+  const [liked, setLiked] = useState(false);
+  const [numOfLikes, setNumOfLikes] = useState(0);
+  const [change, setChange] = useState(false);
   const replyToUsername = () => {
     return reply ? " to @" + reply.username : "";
   };
@@ -30,11 +35,54 @@ export default function SingleComment({ comment, reply, onReplyFunc }) {
     refetch();
   };
 
+  const onToggleLike = (action) => {
+    setLiked(action);
+    if (action) {
+      makeRequest
+        .post(apiCalls().like.add.comment, {
+          userId: currentUser.id,
+          commentId: comment.id,
+        })
+        .then((res) => {
+          console.log(`liked comment ${comment.id}`);
+          setChange((prev) => !prev);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      makeRequest
+        .delete(apiCalls(comment.id).like.delete.comment, {
+          userId: currentUser.id,
+          commentId: comment.id,
+        })
+        .then((res) => {
+          console.log(`unliked comment ${comment.id}`);
+          setChange((prev) => !prev);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  };
+
+  useEffect(() => {
+    makeRequest
+      .get(apiCalls(comment.id).like.get.fromComment)
+      .then((res) => {
+        setLiked(res.data.some((d) => d["userId"] === currentUser.id));
+        setNumOfLikes(res.data.length || 0);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [change]);
+
   return (
     <View style={styles.container}>
       <View style={styles.commentsContainer}>
         <View>
-          <ProfilePicture picture={comment.profilePic} />
+          <ProfilePicture user={comment} size={30} />
         </View>
         <TouchableOpacity onPress={onClickReply}>
           <View style={styles.textContainer}>
@@ -46,7 +94,7 @@ export default function SingleComment({ comment, reply, onReplyFunc }) {
             <View
               style={{ flexDirection: "row", justifyContent: "flex-start" }}
             >
-              {!reply && (
+              {!reply && data && data.length !== 0 && (
                 <TouchableOpacity onPress={() => setExpandSubcomment(true)}>
                   <Text style={styles.commentBtns}>View Replies</Text>
                 </TouchableOpacity>
@@ -57,12 +105,14 @@ export default function SingleComment({ comment, reply, onReplyFunc }) {
             </View>
           </View>
         </TouchableOpacity>
-
-        <TouchableOpacity style={styles.likeBtn}>
-          {true ? (
-            <Entypo name="heart-outlined" size={20} color="black" />
-          ) : (
+        <TouchableOpacity
+          style={styles.likeBtn}
+          onPress={() => onToggleLike(!liked)}
+        >
+          {liked ? (
             <Entypo name="heart" size={20} color="black" />
+          ) : (
+            <Entypo name="heart-outlined" size={20} color="black" />
           )}
         </TouchableOpacity>
       </View>
@@ -101,8 +151,10 @@ export default function SingleComment({ comment, reply, onReplyFunc }) {
 
 const styles = StyleSheet.create({
   container: {
-    position: "relative",
     backgroundColor: theme.colors.background,
+    overflow: "hidden",
+    display: "flex",
+    justifyContent: "space-between",
   },
   commentsContainer: {
     flexDirection: "row",
@@ -112,12 +164,13 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     position: "relative",
   },
-  textContainer: { margin: 0 },
-  text: { flexWrap: "wrap", fontSize: 13 },
+  textContainer: { marginRight: 50, width: "auto", overflow: "hidden" },
+  text: { fontSize: 13, width: "90%" },
   replyUsername: {
     color: theme.colors.secondary,
     fontWeight: "600",
     marginBottom: 5,
+    width: "100%",
   },
   likeBtn: { position: "absolute", right: 15, top: 10 },
   commentBtns: {

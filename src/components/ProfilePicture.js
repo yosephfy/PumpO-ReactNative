@@ -1,21 +1,38 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableHighlight,
+  TouchableOpacity,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import backupPic from "../../assets/logo.png";
 import { theme } from "../core/theme";
+import { router } from "expo-router";
 
-export default function ProfilePicture({ picture, size }) {
+export default function ProfilePicture({ user, size }) {
+  const { profilePic, userId, id } = user;
   const [finalPic, setFinalPic] = useState();
   useEffect(() => {
-    if (picture) setFinalPic(picture);
+    if (profilePic) setFinalPic(profilePic);
     else setFinalPic(backupPic);
-  }, [picture]);
+  }, [profilePic]);
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => {
+        router.push({
+          pathname: "(HOME)/profile",
+          params: { userId: userId ? userId : id },
+        });
+      }}
+    >
       <Image
         style={[styles.image, { width: size ? size : 30 }]}
         src={finalPic}
       />
-    </View>
+    </TouchableOpacity>
   );
 }
 

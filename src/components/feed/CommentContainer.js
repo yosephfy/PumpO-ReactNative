@@ -16,6 +16,7 @@ import { theme } from "../../core/theme";
 import { apiCalls } from "../../utility/Enums";
 import ProfilePicture from "../ProfilePicture";
 import SingleComment from "./SingleComment";
+import { router } from "expo-router";
 
 export default function CommentContainer({ post, onPostComment }) {
   const { currentUser } = useContext(AuthContext);
@@ -40,7 +41,7 @@ export default function CommentContainer({ post, onPostComment }) {
   return (
     <>
       <View style={styles.writeCommentContainer}>
-        <ProfilePicture picture={currentUser.profilePic} size={28} />
+        <ProfilePicture user={currentUser} size={28} />
         <TextInput
           ref={writeBoxRef}
           id="commentInput"

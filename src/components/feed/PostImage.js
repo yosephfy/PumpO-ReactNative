@@ -9,6 +9,7 @@ import { apiCalls } from "../../utility/Enums";
 import { WhatTimeAgo } from "../../utility/utility";
 import ProfilePicture from "../ProfilePicture";
 import CommentContainer from "./CommentContainer";
+import { router } from "expo-router";
 
 export default function PostImage({ feed }) {
   const { currentUser } = useContext(AuthContext);
@@ -124,7 +125,7 @@ export default function PostImage({ feed }) {
     <View style={styles.container}>
       <View style={styles.top}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <ProfilePicture picture={feed.profilePic} size={32} />
+          <ProfilePicture user={feed} size={32} />
           <Text style={styles.title}>
             @{feed.username}
             {" • "}
