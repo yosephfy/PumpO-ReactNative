@@ -23,7 +23,7 @@ export default function FeedContainer({ domain }) {
     liked: apiCalls(currentUser.id).feed.get.liked,
   };
   const { isLoading, error, data } = useQuery({
-    queryKey: ["feed"],
+    queryKey: ["feed", domain],
     queryFn: async () => {
       let list = [];
       await Promise.all(

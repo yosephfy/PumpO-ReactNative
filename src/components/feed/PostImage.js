@@ -96,6 +96,8 @@ export default function PostImage({ feed }) {
           desc: comment,
         })
         .then(() => {
+          setNumOfComments((prev) => prev + 1);
+          setChange((prev) => !prev);
           refetchFunction();
           queryClient.refetchQueries({ queryKey: ["subcomments"] });
         })
@@ -111,6 +113,8 @@ export default function PostImage({ feed }) {
         })
         .then(() => {
           refetchFunction();
+          setNumOfComments((prev) => prev + 1);
+          setChange((prev) => !prev);
           queryClient.refetchQueries({
             queryKey: ["subcomments"],
           });

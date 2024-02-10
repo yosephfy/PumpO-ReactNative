@@ -13,7 +13,7 @@ export default function index() {
     <>
       <HomeTopNav />
       <SafeAreaView>
-        <FeedContainer domain={["user"]} />
+        <FeedContainer domain={["user", "followed"]} />
       </SafeAreaView>
     </>
   );

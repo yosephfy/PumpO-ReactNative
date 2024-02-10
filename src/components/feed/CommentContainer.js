@@ -1,8 +1,7 @@
-import { Ionicons, Entypo } from "@expo/vector-icons";
+import { Entypo, Ionicons } from "@expo/vector-icons";
 import { useQuery } from "@tanstack/react-query";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import {
-  Alert,
   ScrollView,
   StyleSheet,
   Text,
@@ -16,7 +15,6 @@ import { theme } from "../../core/theme";
 import { apiCalls } from "../../utility/Enums";
 import ProfilePicture from "../ProfilePicture";
 import SingleComment from "./SingleComment";
-import { router } from "expo-router";
 
 export default function CommentContainer({ post, onPostComment }) {
   const { currentUser } = useContext(AuthContext);
@@ -33,9 +31,18 @@ export default function CommentContainer({ post, onPostComment }) {
       }),
   });
 
+  useEffect(() => {
+    writeBoxRef.current.focus;
+  });
+
   const AddReply = (replyUsername = null, replyCommentId = 0) => {
     setCommentPlaceholder(`You are replying to ${replyUsername}`);
     setIsReplying(replyCommentId);
+  };
+
+  const removeReply = () => {
+    setCommentPlaceholder("Add a comment");
+    setIsReplying(0);
   };
 
   return (
@@ -66,6 +73,7 @@ export default function CommentContainer({ post, onPostComment }) {
         <TouchableOpacity
           style={styles.sendBtn}
           onPress={() => {
+            removeReply();
             onPostComment(commentInput, isReplying, refetch);
             writeBoxRef.current.clear();
           }}

@@ -6,6 +6,7 @@ import { makeRequest } from "../../../axios";
 import { apiCalls } from "../../utility/Enums";
 import { Ionicons, Entypo, Octicons } from "@expo/vector-icons";
 import { theme } from "../../core/theme";
+import ProfileTabs from "./ProfileTabs";
 
 export default function ProfilePage({ id }) {
   const { error, isLoading, data, refetch } = useQuery({
@@ -67,9 +68,7 @@ export default function ProfilePage({ id }) {
           <Text style={styles.bio}>{data.bio}</Text>
         </View>
       </View>
-      <View style={styles.bottom}>
-        <Text>8</Text>
-      </View>
+      <ProfileTabs />
     </View>
   );
 }
@@ -77,7 +76,13 @@ export default function ProfilePage({ id }) {
 const styles = StyleSheet.create({
   container: {},
   top: { backgroundColor: "white", height: "auto", paddingBottom: 10 },
-  bottom: { backgroundColor: "grey", height: "50%" },
+  bottom: {
+    height: "100%",
+    backgroundColor: "wheat",
+    alignContent: "center",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   profilePic: { alignItems: "center", marginTop: 50, marginBottom: 10 },
   topButtons: {},
   backBtb: { position: "absolute", top: 15, left: 10 },
