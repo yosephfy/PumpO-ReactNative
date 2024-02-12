@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useContext } from "react";
-import { ScrollView, StyleSheet, Text } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { makeRequest } from "../../../axios";
 import { AuthContext } from "../../context/AuthContext";
 import { dimensions } from "../../core/theme";

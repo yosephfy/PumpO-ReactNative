@@ -1,5 +1,11 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import React from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
+import React, { useContext, useState } from "react";
 import ProfilePicture from "../ProfilePicture";
 import { useQuery } from "@tanstack/react-query";
 import { makeRequest } from "../../../axios";
@@ -7,75 +13,43 @@ import { apiCalls } from "../../utility/Enums";
 import { Ionicons, Entypo, Octicons } from "@expo/vector-icons";
 import { theme } from "../../core/theme";
 import ProfileTabs from "./ProfileTabs";
+import ProfileInfo from "./ProfileInfo";
+import { Tab, TabView } from "@rneui/themed";
+import FeedContainer from "../feed/FeedContainer";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function ProfilePage({ id }) {
+  const [currUser, setUser] = useState(false);
+  const { currentUser } = useContext(AuthContext);
+
   const { error, isLoading, data, refetch } = useQuery({
     queryKey: ["profilepage"],
     queryFn: () =>
       makeRequest
         .get(apiCalls(id).user.get.withId)
-        .then((res) => res.data)
+        .then((res) => {
+          setUser(res.data.id == currentUser.id);
+          return res.data;
+        })
         .catch((err) => {
           console.error(err);
         }),
   });
   return error ? (
-    <Text>Something went wrong...</Text>
+    <Text style={styles.container}>Something went wrong...</Text>
   ) : isLoading ? (
-    <Text>Loading...</Text>
+    <Text style={styles.container}>Loading...</Text>
   ) : (
-    <View style={styles.container}>
-      <View style={styles.top}>
-        <View style={styles.topButtons}>
-          <TouchableOpacity style={styles.backBtb}>
-            <Ionicons name="chevron-back" size={24} color="black" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.notifBtn}>
-            <Ionicons name="notifications-outline" size={24} color="black" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.moreBtn}>
-            <Entypo name="dots-three-vertical" size={22} color="black" />
-          </TouchableOpacity>
-        </View>
-        <Text style={styles.username}>@{data.username}</Text>
-        <View style={styles.profilePic}>
-          <ProfilePicture user={data} size={100} />
-        </View>
-        <View style={styles.profileInfos}>
-          <TouchableOpacity style={styles.profileInfosItem}>
-            <Text style={{ fontWeight: "700", fontSize: 20 }}>52</Text>
-            <Text style={{ color: theme.colors.secondary }}>Posts</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.profileInfosItem}>
-            <Text style={{ fontWeight: "700", fontSize: 20 }}>15</Text>
-            <Text style={{ color: theme.colors.secondary }}>Followers</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.profileInfosItem}>
-            <Text style={{ fontWeight: "700", fontSize: 20 }}>35</Text>
-            <Text style={{ color: theme.colors.secondary }}>Following</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.profileButtons}>
-          <TouchableOpacity style={styles.profileButtonItem}>
-            <Text>Edit Profile</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.profileButtonItem}>
-            <Text>Share</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.desc}>
-          <Text style={styles.fullname}>{data.name}</Text>
-          <Text style={styles.bio}>{data.bio}</Text>
-        </View>
-      </View>
+    <ScrollView style={styles.container}>
+      <ProfileInfo data={data} isCurrUser={currUser} />
       <ProfileTabs />
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {},
-  top: { backgroundColor: "white", height: "auto", paddingBottom: 10 },
+  container: { height: "100%" },
+  top: { backgroundColor: "white", paddingBottom: 10 },
   bottom: {
     height: "100%",
     backgroundColor: "wheat",

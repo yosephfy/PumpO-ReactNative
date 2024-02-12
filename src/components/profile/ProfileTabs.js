@@ -8,7 +8,7 @@ export default function ProfileTabs() {
 
   const [index, setIndex] = useState(0);
   return (
-    <>
+    <View style={{ height: "auto" }}>
       <Tab
         value={index}
         onChange={(e) => setIndex(e)}
@@ -30,7 +30,7 @@ export default function ProfileTabs() {
           id={2}
         />
       </Tab>
-      <View style={{ height: 500 }}>
+      <View style={{ minHeight: 750, height: "100%" }}>
         <TabView value={index} onChange={setIndex} animationType="spring">
           <TabView.Item style={{ width: "100%", height: "100%" }}>
             <FeedContainer domain={["user"]} />
@@ -43,25 +43,6 @@ export default function ProfileTabs() {
           </TabView.Item>
         </TabView>
       </View>
-    </>
+    </View>
   );
 }
-
-const FirstRoute = () => {
-  const layout = useWindowDimensions();
-
-  return (
-    <ScrollView
-      style={{
-        height: "100%",
-        backgroundColor: "white",
-      }}
-    >
-      <Text>YOOOO</Text>
-    </ScrollView>
-  );
-};
-
-const SecondRoute = () => (
-  <View style={{ flex: 1, backgroundColor: "#673ab7" }} />
-);
