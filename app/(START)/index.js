@@ -5,14 +5,13 @@ import { AuthContext } from "../../src/context/AuthContext";
 
 export default function index() {
   const [loggedIn, setLoggedIn] = useState(false);
+  useEffect(() => {
+    AsyncStorage.getItem("user")
+      .then(() => setLoggedIn(true))
+      .catch(() => setLoggedIn(false));
+  }, []);
 
   return (
-    <>
-      {loggedIn ? (
-        <Redirect href={"/(HOME)"} />
-      ) : (
-        <Redirect href={"/(START)/StartScreen"} />
-      )}
-    </>
+    <>{<Redirect href={loggedIn ? "/(HOME)" : "/(START)/StartScreen"} />}</>
   );
 }

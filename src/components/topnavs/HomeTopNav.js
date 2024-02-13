@@ -13,7 +13,7 @@ export default function HomeTopNav() {
     <SafeAreaView style={styles.container}>
       <TouchableOpacity
         style={styles.header}
-        onPress={() => router.navigate("(START)")}
+        onPress={() => router.navigate("/")}
       >
         <Header>PumpO</Header>
       </TouchableOpacity>

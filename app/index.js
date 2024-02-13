@@ -12,9 +12,9 @@ export default function Page() {
   const [temp, setTemp] = useState(false);
   useEffect(() => {
     AsyncStorage.getItem("user").then((res) => {
-      if (res) setLoggedIn(true);
+      setLoggedIn(true);
     });
-  }, [temp]);
+  }, []);
 
   return (
     <AuthContextProvider>
