@@ -11,7 +11,7 @@ import ProfilePicture from "../ProfilePicture";
 import CommentContainer from "./CommentContainer";
 import { router } from "expo-router";
 
-export default function PostImage({ feed }) {
+export default function PostImage({ feed, onOpenComment }) {
   const { currentUser } = useContext(AuthContext);
   const queryClient = useQueryClient();
 
@@ -169,7 +169,12 @@ export default function PostImage({ feed }) {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => setOpenComment((prev) => !prev)}>
+        <TouchableOpacity
+          onPress={() => {
+            setOpenComment((prev) => !prev);
+            onOpenComment(!openComment);
+          }}
+        >
           <View name="comment" style={styles.interactions}>
             <Ionicons name="chatbubble-outline" size={24} color="black" />
             <Text style={styles.interactionNumbers}>{numOfComments}</Text>
@@ -186,11 +191,11 @@ export default function PostImage({ feed }) {
           {feed.desc}
         </Text>
       </View>
-      <View>
+      {/* <View>
         {openComment && (
           <CommentContainer post={feed} onPostComment={onPostComment} />
         )}
-      </View>
+      </View> */}
     </View>
   );
 }

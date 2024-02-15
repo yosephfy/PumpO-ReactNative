@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { makeRequest } from "../../../axios";
 import { AuthContext } from "../../context/AuthContext";
@@ -7,7 +7,7 @@ import { dimensions } from "../../core/theme";
 import { apiCalls } from "../../utility/Enums";
 import PostImage from "./PostImage";
 
-export default function FeedContainer({ domain }) {
+export default function FeedContainer({ domain, onOpenComment }) {
   const { currentUser } = useContext(AuthContext);
 
   /* const apiFeedCalls = {
@@ -59,7 +59,13 @@ export default function FeedContainer({ domain }) {
         <Text>"Loading..."</Text>
       ) : (
         data.map((fee) => {
-          return <PostImage feed={fee} key={fee.id} />;
+          return (
+            <PostImage
+              feed={fee}
+              key={fee.id}
+              onOpenComment={onOpenComment(fee)}
+            />
+          );
         })
       )}
     </ScrollView>
@@ -68,7 +74,6 @@ export default function FeedContainer({ domain }) {
 
 const styles = StyleSheet.create({
   container: {
-    display: "flex",
     flexDirection: "column",
     marginBottom: dimensions.bottomNavHeight + 20,
   },

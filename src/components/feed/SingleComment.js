@@ -164,8 +164,8 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     position: "relative",
   },
-  textContainer: { marginRight: 50, width: "auto", overflow: "hidden" },
-  text: { fontSize: 13, width: "90%" },
+  textContainer: { marginRight: 60, width: "auto", overflow: "hidden" },
+  text: { fontSize: 13, width: "auto" },
   replyUsername: {
     color: theme.colors.secondary,
     fontWeight: "600",
