@@ -5,6 +5,7 @@ import Ionicons from "@expo/vector-icons/MaterialIcons";
 import { AuthContextProvider } from "../src/context/AuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function Page() {
   const router = useRouter();

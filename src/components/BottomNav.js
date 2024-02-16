@@ -50,6 +50,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     height: dimensions.bottomNavHeight,
     justifyContent: "space-around",
+    position: "absolute",
+    bottom: 100,
+    width: "100%",
   },
   image: {
     top: 10,

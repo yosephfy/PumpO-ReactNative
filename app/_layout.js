@@ -3,6 +3,7 @@ import React from "react";
 import { Stack } from "expo-router";
 import { AuthContextProvider } from "../src/context/AuthContext";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function Layout() {
   const queryClient = new QueryClient();
