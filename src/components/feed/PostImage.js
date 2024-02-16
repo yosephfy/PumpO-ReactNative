@@ -8,8 +8,6 @@ import { theme } from "../../core/theme";
 import { apiCalls } from "../../utility/Enums";
 import { WhatTimeAgo } from "../../utility/utility";
 import ProfilePicture from "../ProfilePicture";
-import CommentContainer from "./CommentContainer";
-import { router } from "expo-router";
 
 export default function PostImage({ feed, onOpenComment }) {
   const { currentUser } = useContext(AuthContext);
@@ -81,50 +79,6 @@ export default function PostImage({ feed, onOpenComment }) {
     }
   };
 
-  const onPostComment = (
-    comment = "",
-    isReply = 0,
-    refetchFunction = () => {}
-  ) => {
-    if (!comment.trim()) return;
-
-    if (isReply == 0) {
-      makeRequest
-        .post(apiCalls().comment.add.post, {
-          elementType: "POST",
-          postId: feed.id,
-          desc: comment,
-        })
-        .then(() => {
-          setNumOfComments((prev) => prev + 1);
-          setChange((prev) => !prev);
-          refetchFunction();
-          queryClient.refetchQueries({ queryKey: ["subcomments"] });
-        })
-        .catch((err) => {
-          console.error("Error sending message:", err);
-        });
-    } else {
-      makeRequest
-        .post(apiCalls().comment.add.comment, {
-          elementType: "COMMENT",
-          commentId: isReply,
-          desc: comment,
-        })
-        .then(() => {
-          refetchFunction();
-          setNumOfComments((prev) => prev + 1);
-          setChange((prev) => !prev);
-          queryClient.refetchQueries({
-            queryKey: ["subcomments"],
-          });
-        })
-        .catch((err) => {
-          console.error("Error sending message:", err);
-        });
-    }
-  };
-
   return (
     <View style={styles.container}>
       <View style={styles.top}>
@@ -172,7 +126,7 @@ export default function PostImage({ feed, onOpenComment }) {
         <TouchableOpacity
           onPress={() => {
             setOpenComment((prev) => !prev);
-            onOpenComment(!openComment);
+            onOpenComment();
           }}
         >
           <View name="comment" style={styles.interactions}>
@@ -206,6 +160,7 @@ const styles = StyleSheet.create({
     minHeight: 250,
     flexDirection: "column",
     backgroundColor: theme.colors.background,
+    position: "relative",
   },
   title: { fontSize: 15, marginLeft: 5, color: theme.colors.text },
   topBtns: {

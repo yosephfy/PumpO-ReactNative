@@ -1,5 +1,11 @@
-import React from "react";
-import { SafeAreaView, ScrollView, Text, useAnimatedValue } from "react-native";
+import React, { useState } from "react";
+import {
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+  useAnimatedValue,
+} from "react-native";
 import Modal from "../modal/Modal";
 import { useQuery } from "@tanstack/react-query";
 import { makeRequest } from "../../../axios";
@@ -7,19 +13,35 @@ import { apiCalls } from "../../utility/Enums";
 import SingleComment from "../feed/SingleComment";
 import CommentInput from "./CommentInput";
 
-export default function CommentModal({
-  post,
-  AddReply,
-  onPostComment,
-  onOpenComment,
-}) {
+export default function CommentModal({ post, onPostComment, onOpenComment }) {
+  const [replyTo, setReplyTo] = useState(0);
+  const [commentPlaceholder, setCommentPlaceholder] = useState("Add a comment");
+
+  const AddReply = (replyUsername = null, replyCommentId = 0) => {
+    setCommentPlaceholder(`You are replying to ${replyUsername}`);
+    setReplyTo(replyCommentId);
+  };
   return (
-    <>
-      <Modal onClose={onOpenComment}>
-        <CommentContainer post={post} />
+    <View
+      style={{
+        bottom: 0,
+        flex: 1,
+        height: "100%",
+        width: "100%",
+        position: "absolute",
+        zIndex: 100,
+      }}
+    >
+      <Modal onClose={onOpenComment(false)}>
+        <CommentContainer post={post} AddReply={AddReply} />
       </Modal>
-      <CommentInput />
-    </>
+      <CommentInput
+        post={post}
+        replyToComment={replyTo}
+        onComment={onPostComment}
+        placeholder={commentPlaceholder}
+      />
+    </View>
   );
 }
 
@@ -33,7 +55,7 @@ const CommentContainer = ({ post, AddReply }) => {
   });
 
   return (
-    <SafeAreaView style={{}}>
+    <SafeAreaView style={{ flex: 1 }}>
       {error ? (
         <Text>HELLLO</Text>
       ) : isLoading ? (

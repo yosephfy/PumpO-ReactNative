@@ -25,17 +25,8 @@ export default function index() {
     <>
       <HomeTopNav />
       <SafeAreaView>
-        <FeedContainer
-          domain={["user", "followed"]}
-          onOpenComment={onOpenComment}
-        />
         <BottomNav />
-        {openComment && (
-          <CommentModal
-            post={post}
-            onOpenComment={() => onOpenComment()(!openComment)}
-          />
-        )}
+        <FeedContainer domain={["user", "followed"]} />
       </SafeAreaView>
     </>
   );

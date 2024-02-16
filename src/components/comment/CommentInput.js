@@ -1,26 +1,36 @@
 import { Entypo, Ionicons } from "@expo/vector-icons";
+import { useQueryClient } from "@tanstack/react-query";
 import { useContext, useEffect, useRef, useState } from "react";
 import {
+  KeyboardAvoidingView,
   SafeAreaView,
   StyleSheet,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { makeRequest } from "../../../axios";
 import { AuthContext } from "../../context/AuthContext";
 import { theme } from "../../core/theme";
+import { apiCalls } from "../../utility/Enums";
 import ProfilePicture from "../ProfilePicture";
 
-export default function CommentInput() {
+export default function CommentInput({ post, replyToComment, placeholder }) {
   const { currentUser } = useContext(AuthContext);
   const [commentInput, setCommentInput] = useState();
   const [commentPlaceholder, setCommentPlaceholder] = useState(`Add a comment`);
   const [isReplying, setIsReplying] = useState(0);
   const writeBoxRef = useRef();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     writeBoxRef.current.focus;
-  });
+  }, []);
+
+  useEffect(() => {
+    setIsReplying(replyToComment);
+    setCommentPlaceholder(placeholder);
+  }, [post, replyToComment]);
 
   const AddReply = (replyUsername = null, replyCommentId = 0) => {
     setCommentPlaceholder(`You are replying to ${replyUsername}`);
@@ -32,42 +42,78 @@ export default function CommentInput() {
     setIsReplying(0);
   };
 
+  const onPostComment = () => {
+    if (!commentInput.trim()) return;
+
+    if (isReplying == 0) {
+      makeRequest
+        .post(apiCalls().comment.add.post, {
+          elementType: "POST",
+          postId: post.id,
+          desc: commentInput,
+        })
+        .then(() => {
+          queryClient.refetchQueries({ queryKey: ["comments"] });
+        })
+        .catch((err) => {
+          console.error("Error sending message:", err);
+        });
+    } else {
+      makeRequest
+        .post(apiCalls().comment.add.comment, {
+          elementType: "COMMENT",
+          commentId: isReplying,
+          desc: commentInput,
+        })
+        .then(() => {
+          queryClient.refetchQueries({
+            queryKey: ["subcomments"],
+          });
+        })
+        .catch((err) => {
+          console.error("Error sending message:", err);
+        });
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.writeCommentContainer}>
-        <ProfilePicture user={currentUser} size={38} />
-        <TextInput
-          ref={writeBoxRef}
-          id="commentInput"
-          style={styles.input}
-          numberOfLines={3}
-          multiline
-          textBreakStrategy="balanced"
-          placeholder={commentPlaceholder}
-          onChangeText={(newText) => setCommentInput(newText)}
-        />
-        {isReplying != 0 && (
+      <KeyboardAvoidingView>
+        <View style={styles.writeCommentContainer}>
+          <ProfilePicture user={currentUser} size={38} />
+          <TextInput
+            ref={writeBoxRef}
+            id="commentInput"
+            style={styles.input}
+            numberOfLines={3}
+            multiline
+            textBreakStrategy="balanced"
+            placeholder={commentPlaceholder}
+            onChangeText={(newText) => setCommentInput(newText)}
+          />
+          {isReplying != 0 && (
+            <TouchableOpacity
+              style={styles.clearBtn}
+              onPress={() => {
+                setIsReplying(false);
+                setCommentPlaceholder(`Add a comment`);
+              }}
+            >
+              <Entypo name="cross" size={24} color={theme.colors.error} />
+            </TouchableOpacity>
+          )}
           <TouchableOpacity
-            style={styles.clearBtn}
+            style={styles.sendBtn}
             onPress={() => {
-              setIsReplying(false);
-              setCommentPlaceholder(`Add a comment`);
+              removeReply();
+              onPostComment();
+              writeBoxRef.current.clear();
             }}
           >
-            <Entypo name="cross" size={24} color={theme.colors.error} />
+            <Ionicons name="paper-plane-outline" size={24} color="black" />
           </TouchableOpacity>
-        )}
-        <TouchableOpacity
-          style={styles.sendBtn}
-          onPress={() => {
-            removeReply();
-            onPostComment(commentInput, isReplying, refetch);
-            writeBoxRef.current.clear();
-          }}
-        >
-          <Ionicons name="paper-plane-outline" size={24} color="black" />
-        </TouchableOpacity>
-      </View>
+        </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }

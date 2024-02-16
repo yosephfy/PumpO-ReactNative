@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import BottomSheet from "@gorhom/bottom-sheet";
 
 export default function Modal({ children, onClose }) {
-  const snapshots = useMemo(() => ["50%", "70%"], []);
+  const snapshots = useMemo(() => ["70%", "50%", "100%"], []);
   return (
     <BottomSheet
       index={0}
