@@ -8,6 +8,7 @@ import { makeRequest } from "../../../axios";
 import { apiCalls } from "../../utility/Enums";
 import { router } from "expo-router";
 import { AuthContext } from "../../context/AuthContext";
+import Icon from "../icons/Icon";
 
 export default function SingleComment({ comment, reply, onReplyFunc }) {
   const { currentUser } = useContext(AuthContext);
@@ -105,7 +106,7 @@ export default function SingleComment({ comment, reply, onReplyFunc }) {
             </View>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.likeBtn}
           onPress={() => onToggleLike(!liked)}
         >
@@ -114,7 +115,24 @@ export default function SingleComment({ comment, reply, onReplyFunc }) {
           ) : (
             <Entypo name="heart-outlined" size={20} color="black" />
           )}
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+        <Icon
+          type="Entypo"
+          name={liked ? "heart" : "heart-outlined"}
+          size={20}
+          style={styles.likeBtn}
+          onClick={() => {
+            onToggleLike(!liked);
+          }}
+          query={{
+            func: makeRequest
+              .get(apiCalls(comment.id).like.get.fromComment)
+              .then((res) => res.data.length || 0)
+              .catch((err) => console.warn(`Couldn't find comment likes`)),
+            key: ["numcommentlikes", comment.id],
+          }}
+          showText
+        />
       </View>
       {expandComment && (
         <View style={styles.subcomment}>
@@ -172,7 +190,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     width: "100%",
   },
-  likeBtn: { position: "absolute", right: 15, top: 10 },
+  likeBtn: { position: "absolute", right: 15, top: 5 },
   commentBtns: {
     color: theme.colors.secondary,
     marginRight: 20,

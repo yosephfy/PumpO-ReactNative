@@ -14,6 +14,7 @@ import { AuthContext } from "../../context/AuthContext";
 import { theme } from "../../core/theme";
 import { apiCalls } from "../../utility/Enums";
 import ProfilePicture from "../ProfilePicture";
+import Icon from "../icons/Icon";
 
 export default function CommentInput({ post, replyToComment, placeholder }) {
   const { currentUser } = useContext(AuthContext);
@@ -102,7 +103,7 @@ export default function CommentInput({ post, replyToComment, placeholder }) {
               <Entypo name="cross" size={24} color={theme.colors.error} />
             </TouchableOpacity>
           )}
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.sendBtn}
             onPress={() => {
               removeReply();
@@ -111,7 +112,18 @@ export default function CommentInput({ post, replyToComment, placeholder }) {
             }}
           >
             <Ionicons name="paper-plane-outline" size={24} color="black" />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+          <Icon
+            type="Ionicons"
+            name="paper-plane-outline"
+            size={24}
+            style={styles.sendBtn}
+            onClick={() => {
+              removeReply();
+              onPostComment();
+              writeBoxRef.current.clear();
+            }}
+          />
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -158,7 +170,7 @@ const styles = StyleSheet.create({
   },
   sendBtn: {
     position: "absolute",
-    right: 17,
+    right: 7,
   },
   clearBtn: {
     position: "absolute",

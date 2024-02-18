@@ -1,13 +1,13 @@
-import { Entypo, Ionicons } from "@expo/vector-icons";
 import { useQueryClient } from "@tanstack/react-query";
 import React, { useContext, useEffect, useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import { makeRequest } from "../../../axios";
 import { AuthContext } from "../../context/AuthContext";
 import { theme } from "../../core/theme";
 import { apiCalls } from "../../utility/Enums";
 import { WhatTimeAgo } from "../../utility/utility";
 import ProfilePicture from "../ProfilePicture";
+import Icon from "../icons/Icon";
 
 export default function PostImage({ feed, onOpenComment }) {
   const { currentUser } = useContext(AuthContext);
@@ -100,19 +100,19 @@ export default function PostImage({ feed, onOpenComment }) {
         </View>
 
         <View name="share" style={styles.topBtns}>
-          {favorited ? (
-            <Ionicons name="star" size={20} color="black" />
-          ) : (
-            <Ionicons name="star-outline" size={20} color="black" />
-          )}
-          <Ionicons name="arrow-redo-outline" size={20} color="black" />
+          <Icon
+            type="Ionicons"
+            name={favorited ? "star" : "star-outline"}
+            size={20}
+          />
+          <Icon type="Ionicons" name="arrow-redo-outline" size={20} />
         </View>
       </View>
       <View style={styles.middle}>
         <Image src={feed.img} style={styles.media} />
       </View>
       <View style={styles.bottomBtns}>
-        <TouchableOpacity onPress={() => onToggleLike(!liked)}>
+        {/* <TouchableOpacity onPress={() => onToggleLike(!liked)}>
           <View style={styles.interactions}>
             {liked ? (
               <Entypo name="heart" size={24} color="black" />
@@ -133,7 +133,47 @@ export default function PostImage({ feed, onOpenComment }) {
             <Ionicons name="chatbubble-outline" size={24} color="black" />
             <Text style={styles.interactionNumbers}>{numOfComments}</Text>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+        <View style={styles.interactions}>
+          <Icon
+            type={"Entypo"}
+            name={liked ? "heart" : "heart-outlined"}
+            secondaryIcon={"heart"}
+            size={24}
+            query={{
+              func: makeRequest
+                .get(apiCalls(feed.id).like.get.fromPost)
+                .then((res) => res.data.length || 0)
+                .catch((err) => {
+                  console.error(err);
+                }),
+              key: ["numlikes", feed.id],
+            }}
+            onClick={() => onToggleLike(!liked)}
+            showText
+          />
+        </View>
+        <View style={styles.interactions}>
+          <Icon
+            type={"Ionicons"}
+            name="chatbubble-outline"
+            size={24}
+            query={{
+              func: makeRequest
+                .get(apiCalls(feed.id).comment.get.fromPost)
+                .then((res) => res.data.length || 0)
+                .catch((err) => {
+                  console.error(err);
+                }),
+              key: ["numcomments", feed.id],
+            }}
+            onClick={() => {
+              setOpenComment((prev) => !prev);
+              onOpenComment();
+            }}
+            showText
+          />
+        </View>
       </View>
       <View style={styles.bottomCaption}>
         <Text
@@ -197,20 +237,15 @@ const styles = StyleSheet.create({
   media: { height: "auto", aspectRatio: 1 },
   bottomBtns: {
     flexDirection: "row",
-    paddingVertical: 10,
-    marginHorizontal: 15,
+    paddingVertical: 5,
+    marginHorizontal: 20,
   },
   bottomCaption: {},
   caption: {
     marginHorizontal: 7,
     marginBottom: 10,
   },
-  interactions: {
-    width: 50,
-    height: 30,
-    flexDirection: "row",
-    alignItems: "baseline",
-  },
+  interactions: { marginRight: 10 },
   interactionNumbers: {
     fontSize: 12,
     fontWeight: "300",

@@ -5,6 +5,7 @@ import { SafeAreaView, StyleSheet, TouchableOpacity } from "react-native";
 import { AuthContext } from "../../context/AuthContext";
 import { theme } from "../../core/theme";
 import Header from "../Header";
+import Icon from "../icons/Icon";
 
 export default function HomeTopNav() {
   const { currentUser } = useContext(AuthContext);
@@ -17,12 +18,20 @@ export default function HomeTopNav() {
       >
         <Header>PumpO</Header>
       </TouchableOpacity>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={styles.button}
         onPress={() => router.navigate("(HOME)/messages")}
       >
         <Ionicons name="chatbubbles-outline" size={24} color="black" />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
+      <Icon
+        type="Ionicons"
+        name="chatbubbles-outline"
+        size={24}
+        color="black"
+        onClick={() => router.navigate("(HOME)/messages")}
+        style={styles.button}
+      />
     </SafeAreaView>
   );
 }
@@ -39,7 +48,7 @@ const styles = StyleSheet.create({
   button: {
     justifyContent: "center",
     alignContent: "center",
-    marginRight: 15,
+    marginRight: 10,
   },
   header: {
     justifyContent: "center",
