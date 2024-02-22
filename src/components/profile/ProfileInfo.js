@@ -1,22 +1,42 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { useRouter } from "expo-router";
 import React from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { theme } from "../../core/theme";
-import { Ionicons, Entypo } from "react-native-vector-icons";
 import ProfilePicture from "../ProfilePicture";
+import Icon from "../icons/Icon";
 
 export default function ProfileInfo({ data, isCurrUser }) {
+  const router = useRouter();
   return (
     <View style={styles.top}>
       <View style={styles.topButtons}>
-        <TouchableOpacity style={styles.backBtb}>
-          <Ionicons name="chevron-back" size={24} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.notifBtn}>
-          <Ionicons name="notifications-outline" size={24} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.moreBtn}>
-          <Entypo name="dots-three-vertical" size={22} color="black" />
-        </TouchableOpacity>
+        <View style={styles.backBtb}>
+          <Icon
+            type="Ionicons"
+            name="chevron-back"
+            size={24}
+            color="black"
+            onClick={() => router.back()}
+          />
+        </View>
+        <View style={styles.notifBtn}>
+          <Icon
+            type="Ionicons"
+            name="notifications-outline"
+            size={24}
+            color="black"
+            onClick={() => {}}
+          />
+        </View>
+        <View style={styles.moreBtn}>
+          <Icon
+            type="Entypo"
+            name="dots-three-vertical"
+            size={22}
+            color="black"
+            onClick={() => {}}
+          />
+        </View>
       </View>
       <Text style={styles.username}>@{data.username}</Text>
       <View style={styles.profilePic}>

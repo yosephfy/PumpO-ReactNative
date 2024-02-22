@@ -1,32 +1,40 @@
-import { View, SafeAreaView, Text, Button } from "react-native";
-import React, { useContext, useState } from "react";
-import { useRouter } from "expo-router";
-import { AuthContext } from "../../src/context/AuthContext";
-import HomeTopNav from "../../src/components/topnavs/HomeTopNav";
-import FeedContainer from "../../src/components/feed/FeedContainer";
-import Modal from "../../src/components/modal/Modal";
+import React, { useState } from "react";
+import { SafeAreaView, ScrollView } from "react-native";
 import CommentModal from "../../src/components/comment/CommentModal";
-import BottomNav from "../../src/components/BottomNav";
+import FeedContainer from "../../src/components/feed/FeedContainer";
+import HomeTopNav from "../../src/components/topnavs/HomeTopNav";
+import { dimensions } from "../../src/core/theme";
 
 export default function index() {
-  const router = useRouter();
-  const { currentUser } = useContext(AuthContext);
-  const [openComment, setOpenComment] = useState(false);
-  const [post, setPost] = useState({ id: 1 });
+  const [currentPost, setCurrentPost] = useState(null);
 
-  const onOpenComment = (post) => (toggle) => {
-    setOpenComment(toggle);
-    if (toggle) {
-      setPost(post);
-    }
+  const onCommentOp = (post) => (open) => {
+    setCurrentPost(open ? post : null);
   };
 
   return (
     <>
       <HomeTopNav />
       <SafeAreaView>
-        <BottomNav />
-        <FeedContainer domain={["user", "followed"]} />
+        <ScrollView
+          style={{
+            flexDirection: "column",
+            marginBottom: dimensions.bottomNavHeight + 70,
+            position: "relative",
+            zIndex: -10,
+          }}
+        >
+          <FeedContainer
+            domain={["user", "followed"]}
+            onCommentOp={onCommentOp}
+          />
+        </ScrollView>
+        {currentPost !== null && (
+          <CommentModal
+            post={currentPost}
+            onOpenComment={() => onCommentOp(currentPost)}
+          />
+        )}
       </SafeAreaView>
     </>
   );

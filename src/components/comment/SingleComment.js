@@ -106,16 +106,6 @@ export default function SingleComment({ comment, reply, onReplyFunc }) {
             </View>
           </View>
         </TouchableOpacity>
-        {/* <TouchableOpacity
-          style={styles.likeBtn}
-          onPress={() => onToggleLike(!liked)}
-        >
-          {liked ? (
-            <Entypo name="heart" size={20} color="black" />
-          ) : (
-            <Entypo name="heart-outlined" size={20} color="black" />
-          )}
-        </TouchableOpacity> */}
         <Icon
           type="Entypo"
           name={liked ? "heart" : "heart-outlined"}

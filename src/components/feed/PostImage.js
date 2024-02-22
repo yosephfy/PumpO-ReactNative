@@ -112,28 +112,6 @@ export default function PostImage({ feed, onOpenComment }) {
         <Image src={feed.img} style={styles.media} />
       </View>
       <View style={styles.bottomBtns}>
-        {/* <TouchableOpacity onPress={() => onToggleLike(!liked)}>
-          <View style={styles.interactions}>
-            {liked ? (
-              <Entypo name="heart" size={24} color="black" />
-            ) : (
-              <Entypo name="heart-outlined" size={24} color="black" />
-            )}
-            <Text style={styles.interactionNumbers}>{numOfLikes}</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => {
-            setOpenComment((prev) => !prev);
-            onOpenComment();
-          }}
-        >
-          <View name="comment" style={styles.interactions}>
-            <Ionicons name="chatbubble-outline" size={24} color="black" />
-            <Text style={styles.interactionNumbers}>{numOfComments}</Text>
-          </View>
-        </TouchableOpacity> */}
         <View style={styles.interactions}>
           <Icon
             type={"Entypo"}

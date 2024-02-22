@@ -1,7 +1,8 @@
 {
-    "editor.codeActionsOnSave": {
-        "source.fixAll": "always"
-    },
-    "editor.formatOnSave": true,
-    "editor.formatOnPaste": true
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "always"
+  },
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "dataworkspace.excludedProjects": ["PumpO/PumpO.sqlproj"]
 }

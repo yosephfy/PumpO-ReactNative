@@ -1,22 +1,12 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
-import React, { useContext, useState } from "react";
-import ProfilePicture from "../ProfilePicture";
 import { useQuery } from "@tanstack/react-query";
+import React, { useContext, useState } from "react";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { makeRequest } from "../../../axios";
-import { apiCalls } from "../../utility/Enums";
-import { Ionicons, Entypo, Octicons } from "@expo/vector-icons";
-import { theme } from "../../core/theme";
-import ProfileTabs from "./ProfileTabs";
-import ProfileInfo from "./ProfileInfo";
-import { Tab, TabView } from "@rneui/themed";
-import FeedContainer from "../feed/FeedContainer";
 import { AuthContext } from "../../context/AuthContext";
+import { theme } from "../../core/theme";
+import { apiCalls } from "../../utility/Enums";
+import ProfileInfo from "./ProfileInfo";
+import ProfileTabs from "./ProfileTabs";
 
 export default function ProfilePage({ id }) {
   const [currUser, setUser] = useState(false);
@@ -43,12 +33,13 @@ export default function ProfilePage({ id }) {
     <ScrollView style={styles.container}>
       <ProfileInfo data={data} isCurrUser={currUser} />
       <ProfileTabs />
+      <View style={{ height: 100 }} />
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { height: "100%" },
+  container: { height: "100%", zIndex: -10 },
   top: { backgroundColor: "white", paddingBottom: 10 },
   bottom: {
     height: "100%",

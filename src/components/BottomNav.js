@@ -58,8 +58,9 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
     height: dimensions.bottomNavHeight,
     position: "absolute",
-    bottom: 100,
+    bottom: 0,
     width: "100%",
+    zIndex: 1,
   },
   tabs: { flexDirection: "row", justifyContent: "space-around", top: 10 },
 });

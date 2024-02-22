@@ -8,7 +8,7 @@ export default function ProfileTabs() {
 
   const [index, setIndex] = useState(0);
   return (
-    <View style={{ height: "auto" }}>
+    <View style={{ height: "100%" }}>
       <Tab
         value={index}
         onChange={(e) => setIndex(e)}
@@ -25,24 +25,34 @@ export default function ProfileTabs() {
           id={1}
         />
         <Tab.Item
-          title="cart"
+          title="Followed"
           titleStyle={{ fontSize: 12, color: "black" }}
           id={2}
         />
       </Tab>
-      <View style={{ minHeight: 750, height: "100%" }}>
-        <TabView value={index} onChange={setIndex} animationType="spring">
-          <TabView.Item style={{ width: "100%", height: "100%" }}>
-            <FeedContainer domain={["user"]} />
-          </TabView.Item>
-          <TabView.Item style={{ width: "100%", height: "100%" }}>
-            <FeedContainer domain={["liked"]} />
-          </TabView.Item>
-          <TabView.Item style={{ width: "100%", height: "100%" }}>
-            <Text>Cart</Text>
-          </TabView.Item>
-        </TabView>
-      </View>
+      {/* <TabView
+        value={index}
+        onChange={setIndex}
+        animationType="spring"
+        containerStyle={{ height: "auto", width: "auto" }}
+      >
+        <TabView.Item style={{ width: "100%", height: "auto" }}>
+          <FeedContainer domain={["user"]} />
+        </TabView.Item>
+        <TabView.Item style={{ width: "100%", height: "100%" }}>
+          <FeedContainer domain={["liked"]} />
+        </TabView.Item>
+        <TabView.Item style={{ width: "100%", height: "100%" }}>
+          <Text>Cart</Text>
+        </TabView.Item>
+      </TabView> */}
+      {index == 0 ? (
+        <FeedContainer domain={["user"]} />
+      ) : index == 1 ? (
+        <FeedContainer domain={["liked"]} />
+      ) : (
+        <FeedContainer domain={["followed"]} />
+      )}
     </View>
   );
 }

@@ -1,4 +1,4 @@
-import { Entypo, Ionicons } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 import { useQueryClient } from "@tanstack/react-query";
 import { useContext, useEffect, useRef, useState } from "react";
 import {
@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { makeRequest } from "../../../axios";
 import { AuthContext } from "../../context/AuthContext";
-import { theme } from "../../core/theme";
+import { dimensions, theme } from "../../core/theme";
 import { apiCalls } from "../../utility/Enums";
 import ProfilePicture from "../ProfilePicture";
 import Icon from "../icons/Icon";
@@ -103,16 +103,6 @@ export default function CommentInput({ post, replyToComment, placeholder }) {
               <Entypo name="cross" size={24} color={theme.colors.error} />
             </TouchableOpacity>
           )}
-          {/* <TouchableOpacity
-            style={styles.sendBtn}
-            onPress={() => {
-              removeReply();
-              onPostComment();
-              writeBoxRef.current.clear();
-            }}
-          >
-            <Ionicons name="paper-plane-outline" size={24} color="black" />
-          </TouchableOpacity> */}
           <Icon
             type="Ionicons"
             name="paper-plane-outline"
@@ -135,7 +125,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
     position: "absolute",
     width: "100%",
-    bottom: 100,
+    bottom: 100 + dimensions.bottomNavHeight,
   },
   writeCommentContainer: {
     flexDirection: "row",

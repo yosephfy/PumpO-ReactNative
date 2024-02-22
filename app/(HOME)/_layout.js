@@ -9,7 +9,8 @@ import CommentInput from "../../src/components/comment/CommentInput";
 export default function Layout() {
   return (
     <>
-      <GestureHandlerRootView style={{ flex: 1 }}>
+      <BottomNav />
+      <GestureHandlerRootView style={{ flex: 1, zIndex: -10 }}>
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="index" />
           <Stack.Screen name="profile" />
