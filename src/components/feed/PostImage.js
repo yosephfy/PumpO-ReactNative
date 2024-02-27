@@ -124,6 +124,7 @@ export default function PostImage({ feed, onOpenComment }) {
                 .then((res) => res.data.length || 0)
                 .catch((err) => {
                   console.error(err);
+                  return 0;
                 }),
               key: ["numlikes", feed.id],
             }}
@@ -142,6 +143,7 @@ export default function PostImage({ feed, onOpenComment }) {
                 .then((res) => res.data.length || 0)
                 .catch((err) => {
                   console.error(err);
+                  return 0;
                 }),
               key: ["numcomments", feed.id],
             }}

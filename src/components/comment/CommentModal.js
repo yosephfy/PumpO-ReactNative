@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import {
+  KeyboardAvoidingView,
+  Platform,
   SafeAreaView,
   ScrollView,
   Text,
@@ -22,24 +24,32 @@ export default function CommentModal({ post, onPostComment, onOpenComment }) {
     setReplyTo(replyCommentId);
   };
   return (
-    <SafeAreaView
+    <KeyboardAvoidingView
       style={{
         height: dim.height,
         width: "100%",
         position: "absolute",
         zIndex: 100,
       }}
+      behavior="position"
+      keyboardVerticalOffset={-80}
+      contentContainerStyle={{
+        height: dim.height,
+        width: "100%",
+        zIndex: 100,
+      }}
     >
       <Modal onClose={onOpenComment(false)}>
         <CommentContainer post={post} AddReply={AddReply} />
       </Modal>
+
       <CommentInput
         post={post}
         replyToComment={replyTo}
         onComment={onPostComment}
         placeholder={commentPlaceholder}
       />
-    </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -53,13 +63,13 @@ const CommentContainer = ({ post, AddReply }) => {
   });
 
   return (
-    <SafeAreaView style={{}}>
+    <SafeAreaView style={{ flex: 1 }}>
       {error ? (
         <Text>HELLLO</Text>
       ) : isLoading ? (
         <Text>HELLLO</Text>
       ) : (
-        <ScrollView style={{ marginBottom: 560 }}>
+        <ScrollView style={{ marginBottom: 300 }}>
           {data.map((comment) => (
             <SingleComment
               key={comment.id}

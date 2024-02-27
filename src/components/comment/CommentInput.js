@@ -3,6 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useContext, useEffect, useRef, useState } from "react";
 import {
   KeyboardAvoidingView,
+  Platform,
   SafeAreaView,
   StyleSheet,
   TextInput,
@@ -25,7 +26,7 @@ export default function CommentInput({ post, replyToComment, placeholder }) {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    writeBoxRef.current.focus;
+    writeBoxRef.current.focus();
   }, []);
 
   useEffect(() => {
@@ -79,43 +80,41 @@ export default function CommentInput({ post, replyToComment, placeholder }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView>
-        <View style={styles.writeCommentContainer}>
-          <ProfilePicture user={currentUser} size={38} />
-          <TextInput
-            ref={writeBoxRef}
-            id="commentInput"
-            style={styles.input}
-            numberOfLines={3}
-            multiline
-            textBreakStrategy="balanced"
-            placeholder={commentPlaceholder}
-            onChangeText={(newText) => setCommentInput(newText)}
-          />
-          {isReplying != 0 && (
-            <TouchableOpacity
-              style={styles.clearBtn}
-              onPress={() => {
-                setIsReplying(false);
-                setCommentPlaceholder(`Add a comment`);
-              }}
-            >
-              <Entypo name="cross" size={24} color={theme.colors.error} />
-            </TouchableOpacity>
-          )}
-          <Icon
-            type="Ionicons"
-            name="paper-plane-outline"
-            size={24}
-            style={styles.sendBtn}
-            onClick={() => {
-              removeReply();
-              onPostComment();
-              writeBoxRef.current.clear();
+      <View style={styles.writeCommentContainer}>
+        <ProfilePicture user={currentUser} size={38} />
+        <TextInput
+          ref={writeBoxRef}
+          id="commentInput"
+          style={styles.input}
+          numberOfLines={3}
+          multiline
+          textBreakStrategy="balanced"
+          placeholder={commentPlaceholder}
+          onChangeText={(newText) => setCommentInput(newText)}
+        />
+        {isReplying != 0 && (
+          <TouchableOpacity
+            style={styles.clearBtn}
+            onPress={() => {
+              setIsReplying(false);
+              setCommentPlaceholder(`Add a comment`);
             }}
-          />
-        </View>
-      </KeyboardAvoidingView>
+          >
+            <Entypo name="cross" size={24} color={theme.colors.error} />
+          </TouchableOpacity>
+        )}
+        <Icon
+          type="Ionicons"
+          name="paper-plane-outline"
+          size={24}
+          style={styles.sendBtn}
+          onClick={() => {
+            removeReply();
+            onPostComment();
+            writeBoxRef.current.clear();
+          }}
+        />
+      </View>
     </SafeAreaView>
   );
 }

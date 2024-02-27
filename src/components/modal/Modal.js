@@ -3,7 +3,7 @@ import React, { useMemo } from "react";
 import { View } from "react-native";
 
 export default function Modal({ children, onClose }) {
-  const snapshots = useMemo(() => ["70%", "50%", "100%"], []);
+  const snapshots = useMemo(() => ["70%"], []);
   return (
     <BottomSheet
       index={0}

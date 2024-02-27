@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SafeAreaView, ScrollView } from "react-native";
+import { SafeAreaView, ScrollView, Keyboard } from "react-native";
 import CommentModal from "../../src/components/comment/CommentModal";
 import FeedContainer from "../../src/components/feed/FeedContainer";
 import HomeTopNav from "../../src/components/topnavs/HomeTopNav";
